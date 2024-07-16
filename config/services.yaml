@@ -1,0 +1,31 @@
+imports:
+    - { resource: 'parameters/jwt.yaml' }
+    # Thought fail,
+    # Calling service MUST be used to sing the key
+    # Target service must have mapping between calling service and jwt key
+    # Then the key from mapping must be used to dynamically replace the lexit public key to validate the jwt
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    BlacklistHubBridge\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+            - '../src/Tests/'
+    BlacklistHubBridge\Service\BridgeService:
+        arguments:
+            $logFilePath: "%blacklist_hub.log.file_path%"
+            $loggerName: "%blacklist_hub.log.name%"
+            $baseUrl: '%blacklist_hub.base_url%'
+
+    Lexik\Bundle\JWTAuthenticationBundle\Services\KeyLoader\AbstractKeyLoader:
+        arguments:
+            $publicKey: 'test'

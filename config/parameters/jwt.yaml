@@ -1,0 +1,3 @@
+parameters:
+  jwt_lifetime_hours: '%blacklist_hub.jwt.lifetime.hours%'
+  jwt_user_name: "%blacklist_hub.jwt.user_name%"
